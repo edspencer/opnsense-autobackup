@@ -20,7 +20,7 @@ There is more context in my blog post at https://edspencer.net/2024/05/28/automa
 
 ## Environment Variables
 
-You need to create a `.env` file with the following environment variables:
+You need to create a `.env` file with the following environment variables (duplicate the .env.example file for an easy start):
 
 ```env
 API_KEY=your_actual_api_key
@@ -93,7 +93,9 @@ CRON_SCHEDULE="0 0 * * *"  # Optional: only required for cron mode
 
 ## Running on TrueNAS SCALE with Configurable Cron Schedule
 
-This Docker container includes a built-in cron job to automate the backup process. The cron schedule is configurable via an environment variable. Follow these steps to deploy it on TrueNAS SCALE:
+This Docker container includes a built-in cron job to automate the backup process. The cron schedule is configurable via an environment variable, and is required in the context of TrueNAS otherwise the container will execute in immediate backup mode and then exit, causing TrueNAS to continually restart it incorrectly.
+
+Follow these steps to deploy it on TrueNAS SCALE:
 
 1. **Open TrueNAS SCALE Web Interface**:
 
@@ -116,16 +118,16 @@ This Docker container includes a built-in cron job to automate the backup proces
 
    - Scroll down to the "Variables" section and add the environment variables from your `.env` file. For each variable, click "Add" and enter the name and value.
 
-   | Name          | Value                                               |
-   | ------------- | --------------------------------------------------- |
-   | API_KEY       | `your_actual_api_key`                               |
-   | API_SECRET    | `your_actual_api_secret`                            |
-   | HOSTNAME      | `firewall.local`                                    |
-   | GIT_REPO_URL  | `https://github.com/your_username/your_repo.git`    |
-   | GIT_USERNAME  | `your_actual_git_username`                          |
-   | GIT_EMAIL     | `your_actual_git_email`                             |
-   | GIT_TOKEN     | `your_actual_git_token`                             |
-   | CRON_SCHEDULE | `0 0 * * *` # Optional: only required for cron mode |
+   | Name          | Value                                            |
+   | ------------- | ------------------------------------------------ |
+   | API_KEY       | `your_actual_api_key`                            |
+   | API_SECRET    | `your_actual_api_secret`                         |
+   | HOSTNAME      | `firewall.local`                                 |
+   | GIT_REPO_URL  | `https://github.com/your_username/your_repo.git` |
+   | GIT_USERNAME  | `your_actual_git_username`                       |
+   | GIT_EMAIL     | `your_actual_git_email`                          |
+   | GIT_TOKEN     | `your_actual_git_token`                          |
+   | CRON_SCHEDULE | `0 0 * * *`                                      |
 
 6. **Deploy the App**:
    - Click on "Launch" to deploy the Docker container.
