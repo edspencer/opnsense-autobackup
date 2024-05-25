@@ -71,7 +71,7 @@ docker run --rm   -e API_KEY="your_actual_api_key"   -e API_SECRET="your_actual_
    The container uses CURL to download the backup from the OPNsense firewall and saves it as `latest.xml`.
 
 3. **Save the Backup with Date**:
-   The container saves another copy of the backup with the current date, e.g., `backup_2024-11-11.xml`.
+   The container saves another copy of the backup with the current date, e.g., `opnsense_2024-05-25_18-00.xml`.
 
 4. **Commit and Push**:
    The container commits the backup files to the GitHub repository with a commit message that includes the current date and pushes the changes.
