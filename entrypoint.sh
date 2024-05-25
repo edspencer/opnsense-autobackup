@@ -19,9 +19,18 @@ backup() {
   # Create a directory to clone the repository if it doesn't exist
   mkdir -p /repo
 
-  # Clone the repository
-  echo "Cloning the repository..."
-  git clone https://$GIT_TOKEN@${GIT_REPO_URL#https://} /repo
+  # Clone the repository if it doesn't exist or pull the latest changes
+  if [ -d "/repo" ] && [ "$(ls -A /repo)" ]; then
+    echo "/repo exists and is not empty, pulling latest changes..."
+    cd /repo
+    git pull
+  else
+    echo "Cloning the repository..."
+    rm -rf /repo
+    mkdir -p /repo
+    git clone https://$GIT_TOKEN@${GIT_REPO_URL#https://} /repo
+    cd /repo || exit 1
+  fi
 
   # Check if the clone was successful
   if [ ! -d "/repo" ]; then
@@ -33,7 +42,7 @@ backup() {
   cd /repo || exit 1
 
   # Get today's date
-  TODAY=$(date +%Y-%m-%d)
+  TODAY=$(date +%Y-%m-%d_%H-%M)
 
   # Run the curl command and save the backup
   echo "Downloading backup..."
