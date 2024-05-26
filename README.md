@@ -20,7 +20,7 @@ There is more context in my blog post at https://edspencer.net/2024/05/28/automa
 
 ## Environment Variables
 
-You need to create a `.env` file with the following environment variables (duplicate the .env.example file for an easy start):
+You need to provide a few environment variables to the container to configure it:
 
 ```env
 API_KEY=your_actual_api_key
@@ -42,6 +42,8 @@ CRON_SCHEDULE="0 0 * * *"  # Optional: only required for cron mode
 - **GIT_TOKEN**: Your GitHub personal access token.
 - **CRON_SCHEDULE**: The cron schedule for running the backup (optional, e.g., "0 0 \* \* \*" for daily at midnight).
 
+How you specify these will depend on how you deploy the image. For some quick and easy testing without commiting secrets to source control, consider the `.env` file approach below. This will keep your passwords and other secrets out of your terminal's command history.
+
 ## Usage
 
 ### Run the Container
@@ -51,7 +53,14 @@ CRON_SCHEDULE="0 0 * * *"  # Optional: only required for cron mode
 To run the container and perform an immediate backup, omit the `CRON_SCHEDULE` environment variable:
 
 ```sh
-docker run --rm   -e API_KEY="your_actual_api_key"   -e API_SECRET="your_actual_api_secret"   -e HOSTNAME="firewall.local"   -e GIT_REPO_URL="https://github.com/your_username/your_repo.git"   -e GIT_USERNAME="your_actual_git_username"   -e GIT_EMAIL="your_actual_git_email"   -e GIT_TOKEN="your_actual_git_token"   edspencer/opnsense-autobackup:latest
+docker run --rm \
+  -e API_KEY="your_actual_api_key" \
+  -e API_SECRET="your_actual_api_secret" \
+  -e HOSTNAME="firewall.local" \
+  -e GIT_REPO_URL="https://github.com/your_username/your_repo.git" \
+  -e GIT_USERNAME="your_actual_git_username" \
+  -e GIT_EMAIL="your_actual_git_email" \
+  -e GIT_TOKEN="your_actual_git_token" edspencer/opnsense-autobackup:latest
 ```
 
 #### Cron Mode
@@ -59,7 +68,14 @@ docker run --rm   -e API_KEY="your_actual_api_key"   -e API_SECRET="your_actual_
 To run the container with a cron schedule, set the `CRON_SCHEDULE` environment variable:
 
 ```sh
-docker run --rm   -e API_KEY="your_actual_api_key"   -e API_SECRET="your_actual_api_secret"   -e HOSTNAME="firewall.local"   -e GIT_REPO_URL="https://github.com/your_username/your_repo.git"   -e GIT_USERNAME="your_actual_git_username"   -e GIT_EMAIL="your_actual_git_email"   -e GIT_TOKEN="your_actual_git_token"   -e CRON_SCHEDULE="0 0 * * *"   edspencer/opnsense-autobackup:latest
+docker run --rm \
+  -e API_KEY="your_actual_api_key" \
+  -e API_SECRET="your_actual_api_secret" \
+  -e HOSTNAME="firewall.local" \
+  -e GIT_REPO_URL="https://github.com/your_username/your_repo.git" \
+  -e GIT_USERNAME="your_actual_git_username"   -e GIT_EMAIL="your_actual_git_email" \
+  -e GIT_TOKEN="your_actual_git_token" \
+  -e CRON_SCHEDULE="0 0 * * *"  edspencer/opnsense-autobackup:latest
 ```
 
 ## How It Works
@@ -89,6 +105,12 @@ GIT_USERNAME=your_actual_git_username
 GIT_EMAIL=your_actual_git_email
 GIT_TOKEN=your_actual_git_token
 CRON_SCHEDULE="0 0 * * *"  # Optional: only required for cron mode
+```
+
+Run using this file like this:
+
+```sh
+docker run --rm --env-file .env edspencer/opnsense-autobackup:latest
 ```
 
 ## Running on TrueNAS SCALE with Configurable Cron Schedule
